@@ -87,6 +87,11 @@
 - For macOS, download `https://dotnet.microsoft.com` LTS version e.g. 8.0
 Choose macOS arm64 or x86 depends on your machine.
 
+```
+dotnet add package Google.Apis.Drive.v3 --version 1.67.0.3373
+dotnet add package Google.Apis.DriveLabels.v2 --version 1.67.0.3273
+```
+
 # Run
 
 - FolderID is the the last part of Google Drive url `https://drive.google.com/drive/u/0/folders/<folder-id>`. Then you can run the code, login with workspace account and allow access. Don't worry, the application is created by you (**"OAuth Client ID"**) not me.
