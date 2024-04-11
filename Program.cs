@@ -48,7 +48,7 @@ namespace MyDriveProject
                 Console.WriteLine("File ID: " + file.Id);
                 Console.WriteLine("----------------------");
 
-                // 套用既有標籤到檔案
+                // Apply labelId to current file
                 // Create the ModifyLabelsRequest object
                 var modifyRequest = new ModifyLabelsRequest();
 
@@ -60,7 +60,7 @@ namespace MyDriveProject
                         new LabelFieldModification
                         {
                             FieldId = fieldId,
-                            SetSelectionValues = [selectionId] // 值必須是 selectionId 請先從 label.get API +  得到
+                            SetSelectionValues = [selectionId] // selectionId obtained from label.get API
                         }
                     ]
                 };
@@ -87,7 +87,7 @@ namespace MyDriveProject
             var results = new List<Google.Apis.Drive.v3.Data.File>();
             var request = service.Files.List();
             request.Q = $"'{parentFolderId}' in parents";  // Modify the 'q' query if needed
-            request.Fields = "nextPageToken, files(id, name, mimeType)"; // 需要加入查詢mimeType 才能用做判斷是否為目錄
+            request.Fields = "nextPageToken, files(id, name, mimeType)"; // include mimeType in 'q' query to tell if it's folder
             request.IncludeItemsFromAllDrives = true; // Include files from Shared Drives
             request.SupportsAllDrives = true;         // Required if including files from Shared Drives             
 
@@ -105,28 +105,9 @@ namespace MyDriveProject
                     else
                     {
                         // Files
-
-                        // try
-                        // {
-                        //     var listRequest = service.Files.ListLabels(file.Id);
-                        //     var labels = await listRequest.ExecuteAsync();
-
-                        //     foreach (var label in labels.Labels)
-                        //     {
-
-                        //         if (label.Id == labelId){
-                        //             Console.WriteLine("File Name: "+file.Name+" already labeled.");
-                        //             // Already labeled
-                        //             continue;
-                        //         }
-                        //     }                            
-                        // }
-                        // catch (Exception ex)
-                        // {
-                        //     Console.WriteLine($"Error getting labels: {ex.Message}");
-                        // }
-
-                        // Not labeled yet
+                        // It's possible to check if the file was already labeled via
+                        // ListLabels API with file.Id, but creates more API requests
+                        // while ModifyLabelsRequest fires once only.
                         results.Add(file);
                     }
                 }
